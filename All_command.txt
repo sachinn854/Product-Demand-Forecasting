@@ -1,0 +1,87 @@
+📁 1. PROJECT FOLDER BANANA (if not already)
+
+cd "C:\Users\sachi\OneDrive"
+mkdir "Product Demand Forecasting"
+cd "Product Demand Forecasting"
+
+
+🐍 2. VIRTUAL ENVIRONMENT CREATE KARNA
+& "C:\Users\sachi\AppData\Local\Programs\Python\Python313\python.exe" -m venv venv
+🔁 (Use your Python path from Jupyter: sys.executable)
+
+
+
+⚡ 3. VENV ACTIVATE KARNA (PowerShell)
+.\venv\Scripts\Activate.ps1
+
+
+
+📦 4. REQUIRED LIBRARIES INSTALL KARNA
+
+pip install pandas numpy matplotlib seaborn  # Jo bhi chahiye
+
+
+
+📄 5. DEPENDENCIES KO SAVE KARNA (requirements.txt)
+
+pip freeze > requirements.txt
+
+
+
+🚫 6. .gitignore FILE BANANA (venv ignore karne ke liye)
+Create .gitignore file and paste this content:
+
+venv/
+__pycache__/
+.DS_Store
+❗ Ye zaroori hai — venv GitHub pe push nahi hona chahiye.
+
+
+
+
+🧠 7. GIT REPO INITIALIZE KARNA
+
+git init
+
+
+
+🔗 8. GITHUB REPO SE LINK KARNA
+
+git remote add origin https://github.com/username/repo-name.git
+Replace username and repo-name with your GitHub details.
+
+
+
+✅ 9. GIT PUSH KARNA
+
+git add .
+git commit -m "Initial commit with venv and requirements"
+git branch -M main
+git push -u origin main
+
+
+
+🔁 10. FUTURE ME VENV ACTIVATE + UPDATE KARNA
+🔹 Jab bhi dobara kaam shuru karo:
+
+cd "C:\Users\sachi\OneDrive\Product Demand Forecasting"
+.\venv\Scripts\Activate.ps1
+
+
+🔹 Agar koi nayi library install karo:
+
+pip install new-library
+pip freeze > requirements.txt
+
+
+🔹 Fir Git push:
+
+git add .
+git commit -m "Added new library and updated code"
+git push
+
+
+✅ BONUS: Jupyter wale code se Python path nikaalne ka
+
+import sys
+print(sys.executable)
