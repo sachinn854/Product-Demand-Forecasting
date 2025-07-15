@@ -1,0 +1,14 @@
+| Feature         | Type                                             | Suggested Encoding                 |
+| --------------- | ------------------------------------------------ | ---------------------------------- |
+| `season`        | **Ordinal**                                      | Label Encoding (with order)        |
+| `productrating` | Ordinal (numeric)                                | Already handled (or bin if needed) |
+| `daytype`       | Possibly ordinal                                 | One-Hot or label                   |
+| `location`      | **Nominal**                                      | One-Hot                            |
+| `promocodeused` | Nominal (binary)                                 | Map to 0/1                         |
+| `adcampaign`    | Nominal (binary)                                 | Map to 0/1                         |
+| `isweekend`     | Nominal (binary)                                 | Map to 0/1                         |
+| `category`      | **Nominal**                                      | One-Hot                            |
+| `brand`         | Nominal                                          | Label or frequency                 |
+| `material`      | Nominal                                          | One-Hot                            |
+| `warehouse`     | Nominal                                          | One-Hot or Label                   |
+| `inventorytype` | Nominal (unless business logic defines priority) | One-Hot                            |
