@@ -1,0 +1,61 @@
+🧮 Numerical Features:
+price
+
+discount_percent
+
+competitorprice
+
+finalprice
+
+temp(c)
+
+rainfall(mm)
+
+weight(kg)
+
+warranty(years)
+
+productrating
+
+launchyear
+
+stocklevel
+
+supplierdelay(days)
+
+🏷️ Categorical Features:
+productid ✅ (might need to be dropped or encoded depending on its significance)
+
+location ✅ (encode)
+
+promocodeused ✅ (binary: yes/no or 1/0)
+
+adcampaign ✅ (binary)
+
+isweekend ✅ (binary)
+
+season ✅ (categorical)
+
+daytype ✅ (categorical)
+
+category ✅
+
+brand ✅
+
+material ✅
+
+warehouse ✅
+
+inventorytype ✅
+
+📅 Date Feature:
+date ✅ — extract useful parts like:
+
+day of week
+
+month
+
+is_holiday (if data available)
+
+week number
+
