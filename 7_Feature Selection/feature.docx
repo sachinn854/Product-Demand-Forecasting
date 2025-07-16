@@ -59,3 +59,29 @@ is_holiday (if data available)
 
 week number
 
+| Feature             | Type        | Suggested Action                                                                |
+| ------------------- | ----------- | ------------------------------------------------------------------------------- |
+| **`productid`**     | Identifier  | ❌ **Drop** (doesn’t add predictive value unless it's product-specific modeling) |
+| **`location`**      | Categorical | ✅ **One-Hot Encode** (few unique locations) or **Label Encode** if too many     |
+| **`promocodeused`** | Binary      | ✅ **Convert to 0/1** (e.g., `yes`/`no` → 1/0)                                   |
+| **`adcampaign`**    | Binary      | ✅ **Convert to 0/1**                                                            |
+| **`isweekend`**     | Binary      | ✅ **Convert to 0/1**                                                            |
+| **`season`**        | Categorical | ✅ **One-Hot Encode** (`spring`, `summer`, etc.)                                 |
+| **`daytype`**       | Categorical | ✅ **One-Hot Encode** (`working`, `holiday`, etc.)                               |
+| **`category`**      | Categorical | ✅ **One-Hot Encode** or **Label Encode** based on cardinality                   |
+| **`brand`**         | Categorical | ⚠️ **Label Encode** (if many unique brands) or Group Rare + Encode              |
+| **`material`**      | Categorical | ✅ One-Hot or Label Encode                                                       |
+| **`warehouse`**     | Categorical | ✅ One-Hot Encode                                                                |
+| **`inventorytype`** | Categorical | ✅ One-Hot Encode or Label Encode                                                |
+
+
+Final Workflow is:
+
+1. Feature Engineering
+2. Encoding
+3. Scaling
+4. Train-Test Split
+5. Model Training
+6. Evaluation
+
+
