@@ -1,9 +1,5 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
-<<<<<<< HEAD:.gitignore
-8_Encoding/Encoded_data.csv
-7_Feature Selection/Featured_data.csv
-6_Merge File/Master_file.csv
 venv/
-=======
-/Large_files/
->>>>>>> 620fec60 (Removed Large Files):venv/.gitignore
+__pycache__/
+.DS_Store
+test/
