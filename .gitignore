@@ -2,6 +2,7 @@
 venv/
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 __pycache__/
 .DS_Store
 test/
@@ -25,3 +26,9 @@ DATA_FINAL/Featured_data.csv
 =======
 8_Encoding/Encoded_data.csv
 >>>>>>> 98b0ef49 (Test)
+=======
+6_Merge File/Master_file.csv
+7_Feature Selection/Featured_data.csv
+8_Encoding/Encoded_data_X.csv
+8_Encoding/Encoded_data_Y.csv
+>>>>>>> 2ce8498c (Removed Large File and Just test the model)
