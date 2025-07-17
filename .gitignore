@@ -1,6 +1,7 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
 venv/
 <<<<<<< HEAD
+<<<<<<< HEAD
 __pycache__/
 .DS_Store
 test/
@@ -9,10 +10,18 @@ DATA_FINAL/Master_file.csv
 DATA_FINAL/encoded_data_X.csv
 DATA_FINAL/encoded_data_Y.csv
 DATA_FINAL/Featured_data.csv
+=======
+
+7_Feature Selection/Featured_data.csv
+>>>>>>> 98b0ef49 (Test)
 6_Merge File/Master_file.csv
 7_Feature Selection/Featured_data.csv
 8_Encoding/Encoded_data_X.csv
 8_Encoding/Encoded_data_Y.csv
+<<<<<<< HEAD
 >>>>>>> fcf7e8f0 (Test the model just for verification and Correct the data)
 =======
 >>>>>>> 7ea38753 (Test)
+=======
+8_Encoding/Encoded_data.csv
+>>>>>>> 98b0ef49 (Test)
