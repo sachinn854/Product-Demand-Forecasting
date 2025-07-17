@@ -6,31 +6,5 @@ __pycache__/
 .DS_Store
 test/
 
-# Ignore processed data files
-DATA_FINAL/encoded_data_X.csv
-DATA_FINAL/encoded_data_Y.csv
-DATA_FINAL/Featured_data.csv
-DATA_FINAL/Master_file.csv
-
-# Ignore large intermediate files
-6_Merge File/Master_file.csv
-7_Feature Selection/Featured_data.csv
-8_Encoding/Encoded_data_X.csv
 8_Encoding/Encoded_data_Y.csv
-=======
-
-venv/
->>>>>>> a072d8b6 (Tracked File in Large github)
-=======
-venv/
-DATA_FINAL/Master_file.csv
-DATA_FINAL/Featured_data.csv
-DATA_FINAL/encoded_data_Y.csv
-<<<<<<< HEAD
-DATA_FINAL/encoded_data_X.csv
-8_Encoding/encoded_data_Y.csv
-8_Encoding/encoded_data_X.csv
->>>>>>> fb57e722 (fixed)
-=======
-DATA_FINAL/encoded_data_X.csv
->>>>>>> e2572f8d (fixed)
+8_Encoding/Encoded_data_X.csv
