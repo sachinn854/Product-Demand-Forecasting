@@ -26,7 +26,11 @@ venv/
 DATA_FINAL/Master_file.csv
 DATA_FINAL/Featured_data.csv
 DATA_FINAL/encoded_data_Y.csv
+<<<<<<< HEAD
 DATA_FINAL/encoded_data_X.csv
 8_Encoding/encoded_data_Y.csv
 8_Encoding/encoded_data_X.csv
 >>>>>>> fb57e722 (fixed)
+=======
+DATA_FINAL/encoded_data_X.csv
+>>>>>>> e2572f8d (fixed)
