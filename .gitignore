@@ -9,16 +9,9 @@ DATA_FINAL/encoded_data_X.csv
 DATA_FINAL/encoded_data_Y.csv
 DATA_FINAL/Featured_data.csv
 DATA_FINAL/Master_file.csv
-<<<<<<< HEAD
 
 # Ignore large intermediate files
 6_Merge File/Master_file.csv
 7_Feature Selection/Featured_data.csv
 8_Encoding/Encoded_data_X.csv
 8_Encoding/Encoded_data_Y.csv
-=======
-8_Encoding/Encoded_data_X.csv
-7_Feature Selection/Featured_data.csv
-Large_File/Encoded_data.csv
-venv/
->>>>>>> 337f54fa (Large Files Removed)
