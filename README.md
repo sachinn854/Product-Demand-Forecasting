@@ -87,17 +87,18 @@ We performed **extensive feature engineering** to enhance model learning:
 
 ---
 
-## 📂 Repository Structure
+📂 Repository Structure
 
-├── 1_DATA/                        # Raw data files
-├── 2_DATA CLEANING/              # Data cleaning scripts and outputs
-├── 3_CLEANED DATA/               # Cleaned datasets after preprocessing
-├── 4_EDA/                        # Exploratory Data Analysis (EDA) notebooks and plots
-├── 5_verification of data sets/  # Cross-verification, data checks
-├── 6_Merge File/                 # Final merged dataset with all features
-├── 7_Feature Selection/          # Feature selection scripts and logic
-├── 8_Encoding/                   # Encoding scripts (label encoding, one-hot etc.)
-├── test/                         # Model testing and evaluation results
-├── requirements.txt              # Python dependencies
-├── All_command.txt               # Environment and setup commands
-├── README.md                     # Project overview (this file)
+├── 1_DATA/                 # Raw data files  
+├── 2_DATA CLEANING/       # Data cleaning scripts and outputs  
+├── 3_CLEANED DATA/        # Cleaned datasets after preprocessing  
+├── 4_EDA/                 # Exploratory Data Analysis (EDA) notebooks and plots  
+├── 5_verification of data sets/  # Cross-verification, data checks  
+├── 6_Merge File/          # Final merged dataset with all features  
+├── 7_Feature Selection/   # Feature selection scripts and logic  
+├── 8_Encoding/            # Encoding scripts (label encoding, one-hot etc.)  
+├── test/                  # Model testing and evaluation results  
+├── requirements.txt       # Python dependencies  
+├── All_command.txt        # Environment and setup commands  
+└── README.md              # Project overview (this file)
+
