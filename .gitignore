@@ -4,7 +4,6 @@
 venv/
 __pycache__/
 .DS_Store
-test/
 
 8_Encoding/Encoded_data_Y.csv
 8_Encoding/Encoded_data_X.csv
