@@ -6,6 +6,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
+from sklearn.tree import DecisionTreeRegressor
 from sklearn.preprocessing import LabelEncoder
 
 from .preprocessing import build_preprocessor
@@ -14,13 +15,12 @@ from .feature_engineering import FeatureEngineer
 import pandas as pd
 import joblib
 
-
 def evaluate_model(model_name, model, X_train, X_test, y_train, y_test):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
 
     mae = mean_absolute_error(y_test, y_pred)
-    rmse = mean_squared_error(y_test, y_pred, squared=False)
+    rmse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
 
     print(f"\n📌 {model_name} Results:")
@@ -30,11 +30,10 @@ def evaluate_model(model_name, model, X_train, X_test, y_train, y_test):
 
     return {'name': model_name, 'model': model, 'r2': r2, 'rmse': rmse}
 
-
 def train_and_select_best_model(data_path):
     # ===== Load data =====
     df = pd.read_csv(data_path)
-    df=df.drop(columns=['productid'], errors='ignore')
+    df = df.drop(columns=['productid'], errors='ignore')
 
     # ===== Feature Engineering =====
     fe = FeatureEngineer()
@@ -57,6 +56,9 @@ def train_and_select_best_model(data_path):
 
     # ===== Target and Features =====
     X = df.drop(columns=['unit_bin'])
+
+    le = LabelEncoder()
+    df['unit_bin'] = le.fit_transform(df['unit_bin'])
     y = df['unit_bin']
 
     # ===== Identify column types =====
@@ -75,7 +77,8 @@ def train_and_select_best_model(data_path):
     models = {
         'LinearRegression': LinearRegression(),
         'RandomForest': RandomForestRegressor(random_state=42),
-        'XGBoost': XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=5, random_state=42)
+        'XGBoost': XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=5, random_state=42),
+        'DecisionTree': DecisionTreeRegressor(random_state=42)
     }
 
     best_model = None
