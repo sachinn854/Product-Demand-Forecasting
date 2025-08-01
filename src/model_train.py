@@ -1,105 +1,69 @@
-# src/model_train.py
-
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
 
-from .preprocessing import build_preprocessor
-from .feature_engineering import FeatureEngineer
+from src.feature_engineering import FeatureEngineer
+from src.preprocessing import preprocess_data
 
-import pandas as pd
-import joblib
 
-def evaluate_model(model_name, model, X_train, X_test, y_train, y_test):
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-
-    mae = mean_absolute_error(y_test, y_pred)
-    rmse = mean_squared_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-
-    print(f"\n📌 {model_name} Results:")
-    print(f"MAE  : {mae:.2f}")
-    print(f"RMSE : {rmse:.2f}")
-    print(f"R²   : {r2:.4f}")
-
-    return {'name': model_name, 'model': model, 'r2': r2, 'rmse': rmse}
-
-def train_and_select_best_model(data_path):
-    # ===== Load data =====
+def train_model(data_path):
+    # Load CSV file
     df = pd.read_csv(data_path)
-    df = df.drop(columns=['productid'], errors='ignore')
 
-    # ===== Feature Engineering =====
-    fe = FeatureEngineer()
-    df = fe.transform(df)
+    # Step 1: Preprocessing
+    df = preprocess_data(df)
 
-    # ===== Binary encoding =====
-    df['isweekend'] = df['isweekend'].map({'yes': 1, 'no': 0})
-    df['promocodeused'] = df['promocodeused'].map({'Yes': 1, 'No': 0})
+    # Step 2: Drop target-related leakage columns (if present)
+    columns_to_drop = ['unit_bin', 'rating_category']
+    df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], errors='ignore')
 
-    # ===== Drop rows with missing values =====
-    print("🔍 Missing values per column:\n", df.isnull().sum())
-    print("📊 Data shape before dropna:", df.shape)
-    df = df.dropna(inplace=False)
+    # Step 3: Separate target variable
+    y = df['unitssold']
+    X = df.drop(columns=['unitssold'])
 
-    # ✅ Check if enough data is left
-    if df.shape[0] < 5:
-        raise ValueError(f"❌ Not enough data to train. Only {df.shape[0]} rows left after dropna.")
+    # Step 4: Drop features suspected of leakage BEFORE transforming
+    leak_features = [
+        'discount_percent', 'adcampaign', 'stocklevel',
+        'productrating', 'price_diff', 'season',
+        'price_discount_interaction', 'stock_supplier_interaction'
+    ]
+    X = X.drop(columns=[col for col in leak_features if col in X.columns], errors='ignore')
 
-    print(f"✅ Data shape after dropna: {df.shape}")
+    # Step 5: Apply feature engineering (including PCA)
+    fe = FeatureEngineer(apply_pca=True)
+    X = fe.fit_transform(X)
 
-    # ===== Target and Features =====
-    X = df.drop(columns=['unit_bin'])
-
-    le = LabelEncoder()
-    df['unit_bin'] = le.fit_transform(df['unit_bin'])
-    y = df['unit_bin']
-
-    # ===== Identify column types =====
-    binary_cols = ['isweekend', 'promocodeused']
-    categorical_cols = ['location', 'adcampaign', 'brand', 'category', 'material',
-                        'warehouse', 'inventorytype', 'season', 'daytype', 'rating_category']
-    numerical_cols = [col for col in X.columns if col not in categorical_cols + binary_cols]
-
-    # ===== Split =====
+    # Step 6: Train-test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # ===== Build preprocessor =====
-    preprocessor = build_preprocessor(numerical_cols, categorical_cols, binary_cols)
-
-    # ===== Define models =====
+    # Step 7: Train multiple models and compare performance
     models = {
-        'LinearRegression': LinearRegression(),
-        'RandomForest': RandomForestRegressor(random_state=42),
-        'XGBoost': XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=5, random_state=42),
+        'RandomForest': RandomForestRegressor(n_estimators=100, random_state=42),
+        'XGBoost': XGBRegressor(n_estimators=100, random_state=42),
         'DecisionTree': DecisionTreeRegressor(random_state=42)
     }
 
     best_model = None
-    best_rmse = float('inf')
-    best_name = None
+    best_r2 = float('-inf')
+    results = {}
 
-    for name, regressor in models.items():
-        pipeline = Pipeline([
-            ('preprocessor', preprocessor),
-            ('regressor', regressor)
-        ])
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        r2 = r2_score(y_test, y_pred)
+        results[name] = round(r2, 4)
 
-        result = evaluate_model(name, pipeline, X_train, X_test, y_train, y_test)
+        if r2 > best_r2:
+            best_model = model
+            best_r2 = r2
 
-        if result['rmse'] < best_rmse:
-            best_rmse = result['rmse']
-            best_model = result['model']
-            best_name = result['name']
+    print("\n📊 Model Evaluation Results (R² Scores):")
+    for model_name, score in results.items():
+        print(f"  - {model_name}: {score}")
 
-    # ===== Save the best model =====
-    joblib.dump(best_model, 'best_model.pkl')
-    print(f"\n✅ Best model ({best_name}) saved as best_model.pkl")
-
+    # Step 8: Retrain best model on full dataset
+    best_model.fit(X, y)
     return best_model
