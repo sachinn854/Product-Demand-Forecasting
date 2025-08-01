@@ -12,5 +12,5 @@ sys.path.append(src_dir)
 from src.pipeline import run_full_pipeline  # absolute import
 
 if __name__ == "__main__":
-    data_path = "C:\\Users\\sachi\\OneDrive\\Product Demand Forecasting\\6_Merge File\\Master_file.csv"
+    data_path = "6_Merge File/Master_file.csv"
     run_full_pipeline(data_path)

@@ -1,91 +1,42 @@
-# src/feature_engineering.py
-
 import pandas as pd
 import numpy as np
 
 class FeatureEngineer:
-    def fit(self, X, y=None):
-        return self
+    def __init__(self, apply_pca=False):
+        self.apply_pca = apply_pca
+        self.pca = None
 
-    def transform(self, df):
-        df = df.copy()
+    def _preprocess(self, X: pd.DataFrame) -> pd.DataFrame:
+        df = X.copy()
 
-        # Drop 'finalprice'
-        df.drop(['finalprice'], axis=1, inplace=True, errors='ignore')
+        # Rename supplierdelay column first
+        df.rename(columns={'supplierdelay(days)': 'supplierdelay'}, inplace=True)
 
-        # Calculate price difference
-        df['price_diff'] = df['price'] - df['competitorprice']
+        # Feature: discount_percent
+        df['discount_percent'] = (df['price'] - df['finalprice']) / df['price']
+        df['discount_percent'] = df['discount_percent'].fillna(0)
 
-        # Drop highly correlated columns (e.g., competitorprice)
-        df.drop(['competitorprice'], axis=1, inplace=True, errors='ignore')
-
-        # Date features: convert 'date' and extract components, then drop it
-        df['date'] = pd.to_datetime(df['date'], errors='coerce')
-        df['month'] = df['date'].dt.month
-        df['dayofweek'] = df['date'].dt.dayofweek
-        df['week'] = df['date'].dt.isocalendar().week
-        df['year'] = df['date'].dt.year
-        df.drop('date', axis=1, inplace=True, errors='ignore')
-
-        # Clean string columns: lower case and strip spaces
-        df['adcampaign'] = df['adcampaign'].astype(str).str.lower().str.strip()
-        df['isweekend'] = df['isweekend'].astype(str).str.lower().str.strip()
-        df['season'] = df['season'].astype(str).str.lower().str.strip()
-
-        # Generate unitssold using modified logic for more realistic noise and non-deterministic behavior:
-        def generate_unitssold(row):
-            base = 5.0
-            # Discount effect: slightly lower coefficient
-            base += (row['discount_percent'] / 12)
-            # Ad campaign effect: less impactful than before
-            if row['adcampaign'] == 'tv':
-                base += 1.0
-            # Weekend effect: slightly reduced impact
-            if row['isweekend'] == 'yes':
-                base += 0.8
-            # Stock level effect: adjust impact ranges
-            if row['stocklevel'] < 20:
-                base += 1.0
-            elif row['stocklevel'] > 80:
-                base -= 0.8
-            # Product rating effect: slight adjustment
-            base += (row['productrating'] - 5) * 0.4
-            # Price difference effect: reduced impact factor
-            base += (row['price_diff'] / 25)
-            # Season effect: reduced impact
-            if row['season'] in ['holiday', 'summer']:
-                base += 0.8
-            elif row['season'] in ['winter', 'autumn']:
-                base -= 0.4
-            # Add increased noise to introduce randomness
-            noise = np.random.normal(0, 2.0)
-            base += noise
-            return int(np.clip(round(base), 1, 10))
-
-        df['unitssold'] = df.apply(generate_unitssold, axis=1)
-
-        # Bin unitssold into discrete categories
-        def bin_unitssold(x):
-            if x <= 3:
-                return 'Low'
-            elif x <= 7:
-                return 'Medium'
-            else:
-                return 'High'
-        df['unit_bin'] = df['unitssold'].apply(bin_unitssold)
-
-        # Create interaction features
-        df['price_discount_interaction'] = df['price'] * df['discount_percent']
-        df['stock_supplier_interaction'] = df['stocklevel'] * df['supplierdelay(days)']
-
-        # Generate rating category as a binned feature
-        def rating_bin(rating):
-            if rating < 3:
-                return 'low'
-            elif rating < 4:
-                return 'medium'
-            else:
-                return 'high'
-        df['rating_category'] = df['productrating'].apply(rating_bin)
+        df['price_diff'] = df['price'] - df['finalprice']
+        df['price_discount_interaction'] = df['price_diff'] * df['discount_percent']
 
         return df
+
+    def fit(self, X: pd.DataFrame):
+        from sklearn.decomposition import PCA
+        df = self._preprocess(X)
+
+        if self.apply_pca:
+            self.pca = PCA(n_components=0.95)
+            self.pca.fit(df)
+
+    def transform(self, X: pd.DataFrame):
+        df = self._preprocess(X)
+
+        if self.apply_pca and self.pca:
+            df = pd.DataFrame(self.pca.transform(df), index=df.index)
+
+        return df
+
+    def fit_transform(self, X: pd.DataFrame):
+        self.fit(X)
+        return self.transform(X)
