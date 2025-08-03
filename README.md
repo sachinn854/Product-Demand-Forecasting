@@ -1,104 +1,123 @@
 # 🛒 Product Demand Forecasting
 
-This project aims to **predict product demand** based on historical sales, pricing strategies, promotions, inventory data, and product characteristics using machine learning techniques.
+A robust Machine Learning pipeline built to forecast product demand using advanced feature engineering, preprocessing, and model optimization techniques. The pipeline is designed to ensure reproducibility, modularity, and scalability.
 
 ---
 
-## 📌 Project Objectives
+## 📁 Project Structure
 
-- Predict demand (`units_sold`) category using classification
-- Identify key drivers of demand such as price, discount, campaign, weather, etc.
-- Apply advanced feature engineering and ML models to improve accuracy
+Product Demand Forecasting/
+├── 1_DATA/ # Raw data
+├── 2_DATA CLEANING/ # Initial cleaning scripts/output
+├── 3_CLEANED DATA/ # Cleaned datasets
+├── 4_EDA/ # Exploratory Data Analysis
+├── 5_verification of data sets/ # Dataset verification
+├── 6_Merge File/ # Merging multiple datasets
+├── 7_Feature Selection/ # Feature importance, removal
+├── 8_Encoding/ # Encoding categorical features
+├── model/ # Model outputs
+├── models/ # Saved ML models
+├── src/
+│ ├── feature_engineering.py # Custom feature generation
+│ ├── model_train.py # Model training and evaluation
+│ ├── pipeline.py # End-to-end pipeline runner
+│ ├── preprocessing.py # Preprocessing logic (nulls, encoding)
+│ └── init.py
+├── test/ # For future test cases
+├── best_model.pkl # Serialized best model
+├── main.py # Main entry point
+├── All_command.txt # Helpful CLI commands
+├── requirements.txt # Python dependencies
+└── README.md # This file
 
----
 
-## 🗂️ Dataset Overview
-
-- Total Rows: **5,00,000+**
-- Total Columns: **47**
-- Source: Synthetic + structured retail data
-
-### Key Features:
-
-| Column Name            | Description                                 |
-|------------------------|---------------------------------------------|
-| `productid`            | Unique product ID                           |
-| `location`             | Selling location                            |
-| `date`                 | Date of sale                                |
-| `units_sold`           | Target label (binned into demand category)  |
-| `price`, `discount_percent` | Original price & discount offered   |
-| `competitorprice`      | Competitor's product price                  |
-| `adcampaign`           | Whether a campaign ran for the product      |
-| `stocklevel`, `supplierdelay(days)` | Inventory & delay info       |
-| `finalprice`           | Derived as: `price * (1 - discount%)`       |
-| `temp(c)`, `rainfall(mm)` | Weather-related features                  |
-| `productrating`        | Numeric product rating                      |
-| `category`, `brand`, `material`, `warranty(years)` | Product info   |
 
 ---
 
-## 🔧 Feature Engineering
+## 💡 Problem Statement
 
-We performed **extensive feature engineering** to enhance model learning:
-
-- ✅ **Interaction Features**:  
-  - `stock_delay_interaction = stocklevel * supplierdelay`
-- ✅ **Binning**:  
-  - `productrating` → `rating_category` (`low`, `medium`, `high`)
-- ✅ **Log Transformations**:  
-  - `log_price`, `log_competitorprice`, `log_supplierdelay`
-- ✅ **Missing Value Handling**:
-  - Filled `promocodeused` and other categorical nulls with `"None"`
-  - Numeric columns filled using mean/mode strategies
-- ✅ **Label Encoding & One-Hot Encoding** for categorical variables
+The goal is to accurately **forecast the demand** for products based on features like:
+- Product category and sub-category
+- Warehouse location
+- Time period
+- Order priority and quantity
+- Shipment mode and cost
+- Discount and profit margins
+- And many more real-world business features
 
 ---
 
-## 📊 Exploratory Data Analysis (EDA)
+## 🔎 Data Preprocessing & EDA
 
-- Visualized `units_sold` distribution across:
-  - Days of week, seasons, weather types
-- Heatmaps to find correlation between numeric variables
-- Count plots for categorical features like `category`, `brand`, `warehouse`, etc.
-- Found strong influence of:
-  - **Discount %**, **Ad campaigns**, **Weekends**, **Temperature**
+Before building the model:
+- ✅ Missing values were handled
+- ✅ Duplicates removed
+- ✅ Outliers detected and treated using IQR/Z-score
+- ✅ Columns with low or no variance were dropped
+- ✅ Log transformation was applied to skewed distributions
 
----
-
-## 🤖 Models Trained & Accuracy
-
-| Model                | Accuracy |
-|---------------------|----------|
-| Logistic Regression | 78.0%    |
-| Random Forest       | 79.0%    |
-| XGBoost (Tuned)     | **81.5%** ✅ |
-
-> ✅ Final model selected: **XGBoost Classifier** with hyperparameter tuning
+### Basic EDA insights:
+- Most products have low demand
+- Certain categories/sub-categories show seasonal spikes
+- Discounts affect demand patterns differently by region
 
 ---
 
-## 📈 Model Evaluation
+## ⚙️ Machine Learning Pipeline
 
-- Used `accuracy_score`, `confusion_matrix`, and `classification_report`
-- Train-Test split: **80-20**
-- Cross-validation (`cv=3`) used during GridSearchCV
-- Best model tuned with parameters:  
-  - `max_depth`, `learning_rate`, `n_estimators`, `subsample`, `colsample_bytree`
+A complete pipeline was developed with modular components for **cleaning, preprocessing, feature engineering, training, and evaluation**.
+
+### ✅ Steps Included:
+
+1. **Feature Engineering**:
+    - Temporal features from date columns
+    - Interaction terms like `discount × quantity`
+    - Encoding categorical features using target/one-hot encoding
+
+2. **Preprocessing**:
+    - Scaling using StandardScaler
+    - Encoding using LabelEncoder / OneHotEncoder
+    - Imputation (mean/median for numerical, mode for categorical)
+
+3. **Model Training**:
+    - Multiple models trained and evaluated:
+      - `DecisionTreeRegressor`
+      - `RandomForestRegressor`
+      - `XGBoostRegressor`
+
+4. **Evaluation**:
+    - Models evaluated on **R² Score** using a validation set.
+    - Best performing model saved using `joblib`.
 
 ---
 
-📂 Repository Structure
+## 📊 Results
 
-├── 1_DATA/                 # Raw data files  
-├── 2_DATA CLEANING/       # Data cleaning scripts and outputs  
-├── 3_CLEANED DATA/        # Cleaned datasets after preprocessing  
-├── 4_EDA/                 # Exploratory Data Analysis (EDA) notebooks and plots  
-├── 5_verification of data sets/  # Cross-verification, data checks  
-├── 6_Merge File/          # Final merged dataset with all features  
-├── 7_Feature Selection/   # Feature selection scripts and logic  
-├── 8_Encoding/            # Encoding scripts (label encoding, one-hot etc.)  
-├── test/                  # Model testing and evaluation results  
-├── requirements.txt       # Python dependencies  
-├── All_command.txt        # Environment and setup commands  
-└── README.md              # Project overview (this file)
+| Model             | R² Score |
+|------------------|----------|
+| Decision Tree     | 0.8079   |
+| Random Forest     | 0.8958   |
+| XGBoost           | **0.907** |
 
+📌 **XGBoost** was selected as the best model based on its superior performance.
+
+---
+
+## 🚀 How to Run
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/sachinn854/Product-Demand-Forecasting.git
+cd Product-Demand-Forecasting
+
+# 2. Create virtual environment & install dependencies
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
+
+# 3. Run the pipeline
+python main.py
+
+
+📬 Contact
+Made with ❤️ by Sachin Yadav
