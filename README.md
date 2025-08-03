@@ -6,29 +6,31 @@ A robust Machine Learning pipeline built to forecast product demand using advanc
 
 ## 📁 Project Structure
 
-Product Demand Forecasting/
-├── 1_DATA/ # Raw data
-├── 2_DATA CLEANING/ # Initial cleaning scripts/output
-├── 3_CLEANED DATA/ # Cleaned datasets
-├── 4_EDA/ # Exploratory Data Analysis
-├── 5_verification of data sets/ # Dataset verification
-├── 6_Merge File/ # Merging multiple datasets
-├── 7_Feature Selection/ # Feature importance, removal
-├── 8_Encoding/ # Encoding categorical features
-├── model/ # Model outputs
-├── models/ # Saved ML models
+```bash
+Product-Demand-Forecasting/
+├── 1_DATA/                         # Raw data
+├── 2_DATA CLEANING/               # Initial cleaning scripts/output
+├── 3_CLEANED DATA/                # Cleaned datasets
+├── 4_EDA/                         # Exploratory Data Analysis
+├── 5_verification of data sets/   # Dataset verification
+├── 6_Merge File/                  # Merging multiple datasets
+├── 7_Feature Selection/           # Feature importance, removal
+├── 8_Encoding/                    # Encoding categorical features
+├── model/                         # Model outputs
+├── models/                        # Saved ML models
 ├── src/
-│ ├── feature_engineering.py # Custom feature generation
-│ ├── model_train.py # Model training and evaluation
-│ ├── pipeline.py # End-to-end pipeline runner
-│ ├── preprocessing.py # Preprocessing logic (nulls, encoding)
-│ └── init.py
-├── test/ # For future test cases
-├── best_model.pkl # Serialized best model
-├── main.py # Main entry point
-├── All_command.txt # Helpful CLI commands
-├── requirements.txt # Python dependencies
-└── README.md # This file
+│   ├── feature_engineering.py     # Custom feature generation
+│   ├── model_train.py             # Model training and evaluation
+│   ├── pipeline.py                # End-to-end pipeline runner
+│   ├── preprocessing.py           # Preprocessing logic (nulls, encoding)
+│   └── __init__.py
+├── test/                          # For future test cases
+├── best_model.pkl                 # Serialized best model
+├── main.py                        # Main entry point
+├── All_command.txt                # Helpful CLI commands
+├── requirements.txt               # Python dependencies
+└── README.md                      # Project documentation
+
 
 
 
