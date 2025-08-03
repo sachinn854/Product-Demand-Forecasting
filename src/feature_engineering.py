@@ -1,42 +1,35 @@
 import pandas as pd
-import numpy as np
 
 class FeatureEngineer:
-    def __init__(self, apply_pca=False):
-        self.apply_pca = apply_pca
-        self.pca = None
+    def __init__(self):
+        pass
 
     def _preprocess(self, X: pd.DataFrame) -> pd.DataFrame:
         df = X.copy()
 
-        # Rename supplierdelay column first
-        df.rename(columns={'supplierdelay(days)': 'supplierdelay'}, inplace=True)
+        # Convert date column and extract features
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        df['month'] = df['date'].dt.month
+        df['dayofweek'] = df['date'].dt.dayofweek
+        df['week'] = df['date'].dt.isocalendar().week
+        df['year'] = df['date'].dt.year
 
-        # Feature: discount_percent
-        df['discount_percent'] = (df['price'] - df['finalprice']) / df['price']
-        df['discount_percent'] = df['discount_percent'].fillna(0)
+        # Drop unhelpful/leaking columns
+        columns_to_drop = ['productid', 'date', 'location', 'warehouse', 'inventorytype']
+        df.drop(columns=[col for col in columns_to_drop if col in df.columns], inplace=True)
 
-        df['price_diff'] = df['price'] - df['finalprice']
-        df['price_discount_interaction'] = df['price_diff'] * df['discount_percent']
+        # Clean categorical values
+        for col in ['adcampaign', 'season', 'isweekend', 'daytype']:
+            if col in df.columns:
+                df[col] = df[col].astype(str).str.lower().str.strip()
 
         return df
 
     def fit(self, X: pd.DataFrame):
-        from sklearn.decomposition import PCA
-        df = self._preprocess(X)
-
-        if self.apply_pca:
-            self.pca = PCA(n_components=0.95)
-            self.pca.fit(df)
+        pass
 
     def transform(self, X: pd.DataFrame):
-        df = self._preprocess(X)
-
-        if self.apply_pca and self.pca:
-            df = pd.DataFrame(self.pca.transform(df), index=df.index)
-
-        return df
+        return self._preprocess(X)
 
     def fit_transform(self, X: pd.DataFrame):
-        self.fit(X)
-        return self.transform(X)
+        return self._preprocess(X)
