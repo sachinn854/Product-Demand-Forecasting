@@ -31,10 +31,7 @@ Product-Demand-Forecasting/
 ├── requirements.txt               # Python dependencies
 └── README.md                      # Project documentation
 
-
-
-
----
+```
 
 ## 💡 Problem Statement
 
