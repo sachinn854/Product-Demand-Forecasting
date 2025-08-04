@@ -9,3 +9,4 @@ __pycache__/
 8_Encoding/Encoded_data_X.csv
 7_Feature Selection/Featured_data.csv
 6_Merge File/Master_file.csv
+best_model.pkl
