@@ -8,11 +8,11 @@ class FeatureEngineer:
         df = X.copy()
 
         # Convert date column and extract features
-        df['date'] = pd.to_datetime(df['date'], errors='coerce')
-        df['month'] = df['date'].dt.month
-        df['dayofweek'] = df['date'].dt.dayofweek
-        df['week'] = df['date'].dt.isocalendar().week
-        df['year'] = df['date'].dt.year
+        # df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        # df['month'] = df['date'].dt.month
+        # df['dayofweek'] = df['date'].dt.dayofweek
+        # df['week'] = df['date'].dt.isocalendar().week
+        # df['year'] = df['date'].dt.year
 
         # Drop unhelpful/leaking columns
         columns_to_drop = ['productid', 'date', 'location', 'warehouse', 'inventorytype']
