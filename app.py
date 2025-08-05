@@ -3,6 +3,8 @@ import pandas as pd
 import joblib
 from src.feature_engineering import FeatureEngineer
 from src.preprocessing import preprocess_data
+import gdown
+import os
 #predict
 # Page config
 st.set_page_config(
@@ -12,11 +14,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# 🔗 Step 1: Provide the Google Drive file ID
+file_id = "1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+output_path = "models/best_pipeline.pkl"
+
+# ✅ Step 2: Create folder if not exists
+os.makedirs("models", exist_ok=True)
+
+# 📥 Step 3: Download from Google Drive if not already downloaded
+if not os.path.exists(output_path):
+    url = "https://drive.google.com/uc?id=1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+    gdown.download(url, output_path, quiet=False)
+
 # Load model and preprocessor
 @st.cache_resource
 def load_model_and_preprocessor():
     try:
-        model, preprocessor = joblib.load("models/best_pipeline.pkl")
+        model, preprocessor = joblib.load(output_path)
         return model, preprocessor
     except FileNotFoundError as e:
         st.error(f"File not found: {e.filename}")
