@@ -14,32 +14,38 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 🔗 Step 1: Provide the Google Drive file ID
+# Model file config
 file_id = "1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+url = "https://drive.google.com/uc?id=1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
 output_path = "models/best_pipeline.pkl"
-#updated
-# ✅ Step 2: Create folder if not exists
+
+st.write("📦 Checking model file...")
 os.makedirs("models", exist_ok=True)
 
-# 📥 Step 3: Download from Google Drive if not already downloaded
+# Download if not already present
 if not os.path.exists(output_path):
-    url = "https://drive.google.com/uc?id=1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+    st.info("📥 Downloading model from Google Drive...")
+    try:
+        gdown.download(url, output_path, quiet=False, fuzzy=True)
+        st.success("✅ Downloaded successfully.")
+    except Exception as e:
+        st.error(f"❌ Failed to download: {e}")
+        st.stop()
 
-    gdown.download(url, output_path, quiet=False, fuzzy=True)
-
-# Load model and preprocessor
+# Load model with better error handling
 @st.cache_resource
 def load_model_and_preprocessor():
+    st.write("📂 Loading model from:", output_path)
     try:
         model, preprocessor = joblib.load(output_path)
+        st.success("✅ Model loaded successfully.")
         return model, preprocessor
     except FileNotFoundError as e:
-        st.error(f"File not found: {e.filename}")
+        st.error(f"❌ File not found: {e.filename}")
         return None, None
     except Exception as e:
-        st.error(f"Error loading files: {str(e)}")
+        st.error(f"❌ Error loading model: {e}")
         return None, None
-
 # Main app
 def main():
     st.title("📦 Product Demand Forecasting")
