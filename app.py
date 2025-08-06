@@ -17,7 +17,7 @@ st.set_page_config(
 # 🔗 Step 1: Provide the Google Drive file ID
 file_id = "1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
 output_path = "models/best_pipeline.pkl"
-
+#updated
 # ✅ Step 2: Create folder if not exists
 os.makedirs("models", exist_ok=True)
 
