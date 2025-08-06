@@ -13,10 +13,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
 # Model file config
-file_id = "1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
-url = "https://drive.google.com/uc?id=1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+file_id = "1R5xDUGZnA0ndgYy45vmEVamwrTbQVZSd"
+url = "https://drive.google.com/uc?id=1R5xDUGZnA0ndgYy45vmEVamwrTbQVZSd"
 output_path = "models/best_pipeline.pkl"
 
 st.write("📦 Checking model file...")
