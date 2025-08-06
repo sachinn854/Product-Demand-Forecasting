@@ -23,8 +23,9 @@ os.makedirs("models", exist_ok=True)
 
 # 📥 Step 3: Download from Google Drive if not already downloaded
 if not os.path.exists(output_path):
-    url = "https://drive.google.com/file/d/1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4/view?usp=drive_link"
-    gdown.download(url, output_path, quiet=False)
+    url = "https://drive.google.com/uc?id=1cWrbb-nKeNt6naJ4PPqsGjUIqvpYlTA4"
+
+    gdown.download(url, output_path, quiet=False, fuzzy=True)
 
 # Load model and preprocessor
 @st.cache_resource
