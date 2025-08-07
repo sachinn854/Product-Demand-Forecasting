@@ -112,6 +112,8 @@ def main():
             }
 
             try:
+                import warnings
+                warnings.filterwarnings("ignore")
                 df = pd.DataFrame([input_data])
 
                 with st.spinner("Generating prediction..."):

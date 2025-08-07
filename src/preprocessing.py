@@ -24,7 +24,7 @@ def preprocess_data(X: pd.DataFrame, preprocessor=None, fit=True):
 
         categorical_pipeline = Pipeline(steps=[
             ('imputer', SimpleImputer(strategy='most_frequent')),
-            ('encoder', OneHotEncoder(handle_unknown='ignore', drop='first', sparse_output=True))
+            ('encoder', OneHotEncoder(handle_unknown='ignore', drop='first', sparse_output=False))
         ])
 
         preprocessor = ColumnTransformer(
