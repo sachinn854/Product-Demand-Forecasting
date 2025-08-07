@@ -10,5 +10,3 @@ __pycache__/
 7_Feature Selection/Featured_data.csv
 6_Merge File/Master_file.csv
 best_model.pkl
-models/best_pipeline.pkl
-models/preprocessor.pkl
