@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+</head>
+<body>
+    {% if error %}
+        <h3 style="color:red;">{{ error }}</h3>
+    {% else %}
+        <h2>📦 Predicted Units Sold: {{ prediction|round }}</h2>
+        <p>💰 Estimated Revenue: ${{ insights.revenue|round(2) }}</p>
+        <p>📊 Demand Level: {{ insights.demand_level }}</p>
+        <p>📦 Stock Difference: {{ insights.stock_diff }}</p>
+        <p>📈 Profit Margin: {{ insights.profit_margin|round(2) }}%</p>
+        {% if insights.competitive_edge %}
+            <p>✅ Competitive Pricing Advantage</p>
+        {% else %}
+            <p>⚠️ Competitor is cheaper</p>
+        {% endif %}
+        <br>
+        <a href="/">🔙 Back</a>
+    {% endif %}
+</body>
+</html>

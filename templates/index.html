@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Demand Forecasting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>📦 Product Demand Forecasting</h2>
+    <form action="/predict" method="post">
+        <label>Product ID:</label><input name="productid" required><br>
+        <label>Location:</label><input name="location" required><br>
+        <label>Date:</label><input type="date" name="date" required><br>
+        <label>Promocode Used:</label>
+        <select name="promocodeused">
+            <option>Yes</option><option>No</option>
+        </select><br>
+        <label>Price:</label><input type="number" step="0.01" name="price" required><br>
+        <label>Discount Percent:</label><input type="number" step="0.1" name="discount_percent"><br>
+        <label>Competitor Price:</label><input type="number" step="0.01" name="competitorprice"><br>
+        <label>Ad Campaign:</label>
+        <select name="adcampaign">
+            <option>None</option><option>Tv</option><option>Online</option>
+        </select><br>
+        <label>Final Price:</label><input type="number" step="0.01" name="finalprice"><br>
+        <label>Is Weekend:</label>
+        <select name="isweekend">
+            <option>Yes</option><option>No</option>
+        </select><br>
+        <label>Season:</label>
+        <select name="season">
+            <option>Winter</option><option>Spring</option><option>Summer</option><option>Autumn</option>
+        </select><br>
+        <label>Day Type:</label>
+        <select name="daytype">
+            <option>Weekday</option><option>Holiday</option><option>Weekend</option>
+        </select><br>
+        <label>Temperature (°C):</label><input type="number" name="temp"><br>
+        <label>Rainfall (mm):</label><input type="number" name="rainfall"><br>
+        <label>Category:</label><input name="category"><br>
+        <label>Brand:</label>
+        <select name="brand">
+            <option>BrandA</option><option>BrandB</option><option>BrandC</option><option>BrandD</option>
+        </select><br>
+        <label>Material:</label><input name="material"><br>
+        <label>Weight (kg):</label><input type="number" name="weight"><br>
+        <label>Warranty (years):</label><input type="number" name="warranty"><br>
+        <label>Product Rating:</label><input type="number" name="productrating" step="0.1"><br>
+        <label>Launch Year:</label><input type="number" name="launchyear"><br>
+        <label>Stock Level:</label><input type="number" name="stocklevel"><br>
+        <label>Supplier Delay (days):</label><input type="number" name="supplierdelay"><br>
+        <label>Warehouse:</label>
+        <select name="warehouse"><option>W1</option><option>W2</option><option>W3</option></select><br>
+        <label>Inventory Type:</label>
+        <select name="inventorytype">
+            <option>Fresh</option><option>Returned</option><option>Finished Goods</option><option>Repaired</option>
+        </select><br>
+        <button type="submit">🔮 Predict</button>
+    </form>
+</body>
+</html>
