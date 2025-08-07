@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import urllib.request
 
 # Page config
 st.set_page_config(
@@ -11,18 +12,26 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Model file path
+# Hugging Face file URL (direct link to the raw pkl file)
+model_url = "https://huggingface.co/sachin0910/product-demand-pipeline/blob/main/best_pipeline.pkl"
 output_path = "models/best_pipeline.pkl"
 
 st.write("📦 Checking model file...")
-if not os.path.exists(output_path):
-    st.error(f"❌ Model file not found at `{output_path}`. Please check path or re-run training pipeline.")
-    st.stop()
 
-# Load pipeline (model with preprocessing + feature engineering inside)
+# If not already downloaded locally, download it from Hugging Face
+if not os.path.exists(output_path):
+    st.warning("⚠️ Model not found locally. Downloading from Hugging Face...")
+    os.makedirs("models", exist_ok=True)
+    try:
+        urllib.request.urlretrieve(model_url, output_path)
+        st.success("✅ Model downloaded successfully.")
+    except Exception as e:
+        st.error(f"❌ Failed to download model: {e}")
+        st.stop()
+
+# Load the model
 @st.cache_resource
 def load_model():
-    st.write("📂 Loading model from:", output_path)
     try:
         model = joblib.load(output_path)
         st.success("✅ Model loaded successfully.")
@@ -112,8 +121,8 @@ def main():
             }
 
             try:
-                import warnings
-                warnings.filterwarnings("ignore")
+                # import warnings
+                # warnings.filterwarnings("ignore")
                 df = pd.DataFrame([input_data])
 
                 with st.spinner("Generating prediction..."):
