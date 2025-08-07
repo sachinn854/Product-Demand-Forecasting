@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-import gdown
 import os
 
 # Page config
@@ -11,26 +10,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-# https://drive.google.com/file/d/1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw/view?usp=sharing
-# Model file config
-file_id = "1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw"
-url = "https://drive.google.com/uc?id=1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw"
+
+# Model file path
 output_path = "models/best_pipeline.pkl"
 
 st.write("📦 Checking model file...")
-os.makedirs("models", exist_ok=True)
-
-# Download if not present
 if not os.path.exists(output_path):
-    st.info("📥 Downloading model from Google Drive...")
-    try:
-        gdown.download(url, output_path, quiet=False, fuzzy=True)
-        st.success("✅ Downloaded successfully.")
-    except Exception as e:
-        st.error(f"❌ Failed to download: {e}")
-        st.stop()
+    st.error(f"❌ Model file not found at `{output_path}`. Please check path or re-run training pipeline.")
+    st.stop()
 
-# Load pipeline (entire model with preprocessing inside)
+# Load pipeline (model with preprocessing + feature engineering inside)
 @st.cache_resource
 def load_model():
     st.write("📂 Loading model from:", output_path)
