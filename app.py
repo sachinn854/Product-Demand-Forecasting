@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from src.feature_engineering import FeatureEngineer
-from src.preprocessing import preprocess_data
 import gdown
 import os
-#predict
+
 # Page config
 st.set_page_config(
     page_title="Product Demand Forecasting",
@@ -13,15 +11,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+# https://drive.google.com/file/d/1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw/view?usp=sharing
 # Model file config
-file_id = "1R5xDUGZnA0ndgYy45vmEVamwrTbQVZSd"
-url = "https://drive.google.com/uc?id=1R5xDUGZnA0ndgYy45vmEVamwrTbQVZSd"
+file_id = "1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw"
+url = "https://drive.google.com/uc?id=1ZhOtrpzsRhGYlZgyCYwIpTdXYwaUr6Tw"
 output_path = "models/best_pipeline.pkl"
 
 st.write("📦 Checking model file...")
 os.makedirs("models", exist_ok=True)
 
-# Download if not already present
+# Download if not present
 if not os.path.exists(output_path):
     st.info("📥 Downloading model from Google Drive...")
     try:
@@ -31,43 +30,41 @@ if not os.path.exists(output_path):
         st.error(f"❌ Failed to download: {e}")
         st.stop()
 
-# Load model with better error handling
+# Load pipeline (entire model with preprocessing inside)
 @st.cache_resource
-def load_model_and_preprocessor():
+def load_model():
     st.write("📂 Loading model from:", output_path)
     try:
-        model, preprocessor = joblib.load(output_path)
+        model = joblib.load(output_path)
         st.success("✅ Model loaded successfully.")
-        return model, preprocessor
-    except FileNotFoundError as e:
-        st.error(f"❌ File not found: {e.filename}")
-        return None, None
+        return model
     except Exception as e:
         st.error(f"❌ Error loading model: {e}")
-        return None, None
+        return None
+
 # Main app
 def main():
     st.title("📦 Product Demand Forecasting")
     st.markdown("---")
 
-    model, preprocessor = load_model_and_preprocessor()
-    if model is None or preprocessor is None:
+    model = load_model()
+    if model is None:
         st.stop()
 
     col1, col2 = st.columns(2)
 
     with col1:
         st.subheader("🏷️ Promotional & Pricing")
-        promocodeused = st.selectbox("Promocode Used", options=["Yes", "No"], index=1)
-        price = st.number_input("Price ($)", min_value=0.0, value=100.0, step=0.01)
-        discount_percent = st.slider("Discount Percent (%)", min_value=0.0, max_value=100.0, value=10.0, step=0.1)
-        competitorprice = st.number_input("Competitor Price ($)", min_value=0.0, value=110.0, step=0.01)
-        adcampaign = st.selectbox("Ad Campaign", options=["None", "Tv", "Online"], index=0)
+        promocodeused = st.selectbox("Promocode Used", ["Yes", "No"])
+        price = st.number_input("Price ($)", 0.0, value=100.0, step=0.01)
+        discount_percent = st.slider("Discount Percent (%)", 0.0, 100.0, 10.0, 0.1)
+        competitorprice = st.number_input("Competitor Price ($)", 0.0, value=110.0, step=0.01)
+        adcampaign = st.selectbox("Ad Campaign", ["None", "Tv", "Online"])
 
         st.subheader("📅 Temporal Factors")
-        isweekend = st.selectbox("Is Weekend", options=["Yes", "No"], index=1)
-        season = st.selectbox("Season", options=["Winter", "Spring", "Summer", "Autumn"], index=0)
-        daytype = st.selectbox("Day Type", options=["Weekday", "Holiday", "Weekend"], index=0)
+        isweekend = st.selectbox("Is Weekend", ["Yes", "No"])
+        season = st.selectbox("Season", ["Winter", "Spring", "Summer", "Autumn"])
+        daytype = st.selectbox("Day Type", ["Weekday", "Holiday", "Weekend"])
 
     with col2:
         st.subheader("🌤️ Environmental")
@@ -75,23 +72,23 @@ def main():
         rainfall = st.slider("Rainfall (mm)", 0.0, 200.0, 0.0, 0.1)
 
         st.subheader("📦 Product Information")
-        category = st.text_input("Category", value="Electronics")
-        brand = st.selectbox("Brand", options=["BrandA", "BrandB", "BrandC", "BrandD"], index=0)
-        material = st.text_input("Material", value="Plastic")
+        category = st.text_input("Category", "Electronics")
+        brand = st.selectbox("Brand", ["BrandA", "BrandB", "BrandC", "BrandD"])
+        material = st.text_input("Material", "Plastic")
         weight = st.number_input("Weight (kg)", 0.0, value=1.0, step=0.01)
         warranty = st.slider("Warranty (years)", 0.0, 10.0, 1.0, 0.1)
         productrating = st.slider("Product Rating", 1.0, 5.0, 4.0, 0.1)
         launchyear = st.number_input("Launch Year", 1990, 2024, 2023)
-        stocklevel = st.number_input("Stock Level", 0, 100, step=1)
+        stocklevel = st.number_input("Stock Level", 0, 100)
         supplierdelay = st.number_input("Supplier Delay (days)", 0, 30, 5)
 
     st.subheader("🛒 Product Metadata")
-    productid = st.text_input("Product ID", value="P0001")
-    location = st.text_input("Location", value="L01")
+    productid = st.text_input("Product ID", "P0001")
+    location = st.text_input("Location", "L01")
     date = st.date_input("Date")
     finalprice = st.number_input("Final Price ($)", 0.0, value=90.0, step=0.01)
-    warehouse = st.selectbox("Warehouse", options=["W1", "W2", "W3"], index=0)
-    inventorytype = st.selectbox("Inventory Type", options=["Fresh", "Returned", "Finished Goods", "Repaired"], index=0)
+    warehouse = st.selectbox("Warehouse", ["W1", "W2", "W3"])
+    inventorytype = st.selectbox("Inventory Type", ["Fresh", "Returned", "Finished Goods", "Repaired"])
 
     st.markdown("---")
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -128,17 +125,8 @@ def main():
             try:
                 df = pd.DataFrame([input_data])
 
-                # Feature Engineering
-                fe = FeatureEngineer()
-                df_fe = fe.transform(df)
-
-                # Preprocessing using loaded preprocessor (DON'T fit again)
-                df_processed, _ = preprocess_data(df_fe, preprocessor=preprocessor, fit=False)
-
-
-                # Prediction
                 with st.spinner("Generating prediction..."):
-                    prediction = model.predict(df_processed)
+                    prediction = model.predict(df)
 
                 st.success("✅ Prediction Generated Successfully!")
 

@@ -6,12 +6,12 @@ def run_full_pipeline(data_path: str, model_output_path: str = "models/best_pipe
     print("🔄 Starting Full ML Pipeline...\n")
 
     # Train model and get both model and preprocessor
-    model, preprocessor = train_model(data_path)
+    model = train_model(data_path)
 
     # Ensure the output directory exists
     os.makedirs(os.path.dirname(model_output_path), exist_ok=True)
 
     # Save both as a tuple (model, preprocessor)
-    joblib.dump((model, preprocessor), model_output_path)
+    joblib.dump((model), model_output_path, compress=3)
 
     print(f"\n✅ Pipeline complete! Best model saved to: {model_output_path}")

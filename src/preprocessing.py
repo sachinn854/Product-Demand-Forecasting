@@ -10,6 +10,12 @@ def preprocess_data(X: pd.DataFrame, preprocessor=None, fit=True):
     numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
     categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
 
+    # Drop or limit high-cardinality categorical features
+    for col in categorical_cols:
+        if df[col].nunique() > 100:
+            top_20 = df[col].value_counts().nlargest(20).index
+            df[col] = df[col].where(df[col].isin(top_20), other='__OTHER__')
+
     if fit:
         numeric_pipeline = Pipeline(steps=[
             ('imputer', SimpleImputer(strategy='median')),
@@ -18,7 +24,7 @@ def preprocess_data(X: pd.DataFrame, preprocessor=None, fit=True):
 
         categorical_pipeline = Pipeline(steps=[
             ('imputer', SimpleImputer(strategy='most_frequent')),
-            ('encoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+            ('encoder', OneHotEncoder(handle_unknown='ignore', drop='first', sparse_output=True))
         ])
 
         preprocessor = ColumnTransformer(
@@ -36,4 +42,4 @@ def preprocess_data(X: pd.DataFrame, preprocessor=None, fit=True):
     encoded_cols = preprocessor.named_transformers_['cat']['encoder'].get_feature_names_out(categorical_cols)
     all_cols = numeric_cols + list(encoded_cols)
 
-    return pd.DataFrame(X_processed, columns=all_cols), preprocessor
+    return pd.DataFrame(X_processed, columns=all_cols).astype('float32'), preprocessor
