@@ -1,37 +1,13 @@
-# from flask import Flask, render_template, request
-# from predict import load_model, predict_demand
-
-# app = Flask(__name__)
-# model = load_model()
-
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     if model is None:
-#         return render_template('result.html', error="Model not loaded.")
-
-#     try:
-#         form_data = request.form.to_dict()
-#         prediction, insights = predict_demand(model, form_data)
-#         return render_template('result.html', prediction=prediction, insights=insights)
-#     except Exception as e:
-#         return render_template('result.html', error=f"Prediction failed: {e}")
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
 import streamlit as st
 import pandas as pd
 import joblib
 import os
 import logging
+import gdown
 
 # Set up logging for debugging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 # Page config
 st.set_page_config(
     page_title="Product Demand Forecasting",
@@ -40,14 +16,28 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Model path (assumes model is pre-downloaded in the repository)
+# Model path
 MODEL_PATH = "models/best_pipeline.pkl"
 
-# Check if model file exists
+# Google Drive file ID (replace with your file's ID)
+DRIVE_FILE_ID = "1DIFwypMPHvK8ysf1meUBvMXbR90GT3dn"
+DRIVE_URL = "https://drive.google.com/uc?id=1DIFwypMPHvK8ysf1meUBvMXbR90GT3dn"
+
+# Ensure models folder exists
+os.makedirs("models", exist_ok=True)
+
+# Download model if not exists
 if not os.path.exists(MODEL_PATH):
-    st.error(f"❌ Model file not found at {MODEL_PATH}. Please ensure it is included in the repository.")
-    logger.error(f"Model file not found at {MODEL_PATH}")
-    st.stop()
+    try:
+        st.info("📥 Downloading model from Google Drive...")
+        logger.info(f"Downloading model from: {DRIVE_URL}")
+        gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
+        logger.info("Model downloaded successfully.")
+        st.success("✅ Model downloaded successfully.")
+    except Exception as e:
+        st.error(f"❌ Failed to download model: {str(e)}")
+        logger.error(f"Download failed: {str(e)}")
+        st.stop()
 
 # Load the model with efficient caching
 @st.cache_resource(show_spinner=False)
@@ -71,6 +61,7 @@ def validate_inputs(input_data, expected_columns):
             logger.error(f"Missing input: {col}")
             return False
     return True
+
 
 # Main app
 def main():
