@@ -1,3 +1,6 @@
+APP LINK :-  https://product-demand-forecasting.onrender.com/
+
+
 # 🛒 Product Demand Forecasting
 
 A robust Machine Learning pipeline built to forecast product demand using advanced feature engineering, preprocessing, and model optimization techniques. The pipeline is designed to ensure reproducibility, modularity, and scalability.
@@ -95,8 +98,7 @@ A complete pipeline was developed with modular components for **cleaning, prepro
 | Model             | R² Score |
 |------------------|----------|
 | Decision Tree     | 0.8079   |
-| Random Forest     | 0.8958   |
-| XGBoost           | **0.907** |
+| Random Forest     | 0.9039   |
 
 📌 **XGBoost** was selected as the best model based on its superior performance.
 
@@ -120,9 +122,6 @@ python main.py
 
 # to run app 
 
-streamlit run app.py
-This link is too slow because my .pkl file size is very large , so you can clone my project and then you can run this command to view the app
-app link :- https://product-demand-forecasting.onrender.com/
 
 
 
