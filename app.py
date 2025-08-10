@@ -18,10 +18,9 @@ st.set_page_config(
 
 # Model path
 MODEL_PATH = "models/best_pipeline.pkl"
-
 # Google Drive file ID (replace with your file's ID)
-DRIVE_FILE_ID = "1DIFwypMPHvK8ysf1meUBvMXbR90GT3dn"
-DRIVE_URL = "https://drive.google.com/uc?id=1DIFwypMPHvK8ysf1meUBvMXbR90GT3dn"
+DRIVE_FILE_ID = "12V8bG7cQ9GtoHXg2Cg8RV46bhAVlRroz"
+DRIVE_URL = "https://drive.google.com/uc?id=12V8bG7cQ9GtoHXg2Cg8RV46bhAVlRroz"
 
 # Ensure models folder exists
 os.makedirs("models", exist_ok=True)

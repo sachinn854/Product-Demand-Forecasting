@@ -15,7 +15,7 @@ class FeatureEngineer:
         # df['year'] = df['date'].dt.year
 
         # Drop unhelpful/leaking columns
-        columns_to_drop = ['productid', 'date', 'location', 'warehouse', 'inventorytype']
+        columns_to_drop = ['productid', 'date', 'location', 'warehouse', 'inventorytype','price','discount_percent','launchyear','']
         df.drop(columns=[col for col in columns_to_drop if col in df.columns], inplace=True)
 
         # Clean categorical values
