@@ -86,7 +86,6 @@ A complete pipeline was developed with modular components for **cleaning, prepro
     - Multiple models trained and evaluated:
       - `DecisionTreeRegressor`
       - `RandomForestRegressor`
-      - `XGBoostRegressor`
 
 4. **Evaluation**:
     - Models evaluated on **R² Score** using a validation set.
