@@ -1,13 +1,14 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
-<<<<<<< HEAD
-<<<<<<< HEAD
 venv/
 __pycache__/
 .DS_Store
 
+# Data files (keep these ignored due to size)
 8_Encoding/Encoded_data_Y.csv
 8_Encoding/Encoded_data_X.csv
 7_Feature Selection/Featured_data.csv
 6_Merge File/Master_file.csv
-best_model.pkl
-*.pkl
+
+# Remove pkl files from gitignore - models are now small enough for GitHub
+# best_model.pkl
+# *.pkl

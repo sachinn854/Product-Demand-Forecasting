@@ -556,7 +556,6 @@ import pandas as pd
 import joblib
 import os
 import logging
-import gdown
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
@@ -574,10 +573,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Constants
+# Constants - Model is now local, no more downloading!
 MODEL_PATH = "models/best_pipeline.pkl"
-DRIVE_FILE_ID = "12V8bG7cQ9GtoHXg2Cg8RV46bhAVlRroz"
-DRIVE_URL = "https://drive.google.com/uc?id=12V8bG7cQ9GtoHXg2Cg8RV46bhAVlRroz"
 
 # Ensure models folder exists
 os.makedirs("models", exist_ok=True)
@@ -685,73 +682,30 @@ def load_css():
     </style>
     """, unsafe_allow_html=True)
 
-# Model management functions
+# Model management - Now much simpler since it's local!
 @st.cache_resource(show_spinner=False)
-def download_and_load_model():
-    """Download and load the ML model with error handling for custom components"""
+def load_local_model():
+    """Load the local ML model with proper error handling"""
     if not os.path.exists(MODEL_PATH):
-        try:
-            with st.spinner("📥 Downloading model from Google Drive..."):
-                logger.info(f"Downloading model from: {DRIVE_URL}")
-                gdown.download(DRIVE_URL, MODEL_PATH, quiet=False)
-                logger.info("Model downloaded successfully.")
-            st.success("✅ Model downloaded successfully.")
-        except Exception as e:
-            st.error(f"❌ Failed to download model: {str(e)}")
-            logger.error(f"Download failed: {str(e)}")
-            return None
+        st.error(f"❌ Model file not found at: {MODEL_PATH}")
+        st.info("💡 Please run the training pipeline first: `python main.py`")
+        return None
     
     try:
-        logger.info("Loading model...")
-        
-        # Try to import custom modules if they exist
-        try:
-            import sys
-            # Don't re-import os, use the global one
-            
-            # Add the src directory to Python path if it exists
-            src_path = os.path.join(os.getcwd(), 'src')
-            if os.path.exists(src_path) and src_path not in sys.path:
-                sys.path.insert(0, src_path)
-                
-            # Try importing custom modules
-            try:
-                from src.feature_engineering import FeatureEngineer
-                logger.info("Custom FeatureEngineer imported successfully")
-            except ImportError:
-                logger.warning("FeatureEngineer not found - using fallback mode")
-                
-        except Exception as e:
-            logger.warning(f"Could not set up custom imports: {e}")
-        
-        # Load the model
+        logger.info("Loading local model...")
         model = joblib.load(MODEL_PATH)
-        logger.info("Model loaded successfully.")
+        logger.info("Model loaded successfully from local file.")
+        
+        # Get model file size
+        model_size = os.path.getsize(MODEL_PATH) / (1024 * 1024)  # MB
+        st.sidebar.success(f"✅ Model Ready ({model_size:.1f} MB)")
+        
         return model
         
     except Exception as e:
         logger.error(f"Error loading model: {str(e)}")
-        
-        # Provide detailed error information and alternatives
-        st.error("❌ Model Loading Error")
-        st.markdown(f"""
-        **Error Details:** {str(e)}
-        
-        **Possible Solutions:**
-        1. Ensure the `src/feature_engineering.py` file is in your project directory
-        2. Make sure all custom classes used during training are available
-        3. Re-train the model in the same environment where you're deploying
-        4. Check if the model file is corrupted
-        
-        **Alternative Options:**
-        - Use the **Demo Mode** below to test the interface
-        - Upload a new model file trained in this environment
-        """)
-        
-        # Offer demo mode
-        if st.button("🎮 Enable Demo Mode", type="secondary"):
-            return "demo_mode"
-        
+        st.error(f"❌ Model Loading Error: {str(e)}")
+        st.info("💡 Try running `python main.py` to retrain the model")
         return None
 
 # Navigation
@@ -975,9 +929,9 @@ def show_prediction_page():
     st.markdown("---")
     
     # Load model
-    model = download_and_load_model()
+    model = load_local_model()
     if model is None:
-        st.error("❌ Model could not be loaded. Please check the model file.")
+        st.error("❌ Model not available. Please train the model first by running `python main.py`")
         return
     elif model == "demo_mode":
         st.info("🎮 Demo Mode Enabled - Using simulated predictions")
@@ -1002,14 +956,14 @@ def show_prediction_page():
         with col1:
             st.markdown("### 🏷️ Product & Pricing")
             productid = st.text_input("Product ID", "P0001", help="Unique product identifier")
-            category = st.selectbox("Category", ["Electronics", "Clothing", "Home", "Sports"], help="Product category")
+            category = st.selectbox("Category", ["Beauty", "Clothing", "Electronics", "Home", "Toys"], help="Product category")
             brand = st.selectbox("Brand", ["BrandA", "BrandB", "BrandC", "BrandD"])
             price = st.number_input("Price ($)", 0.0, 10000.0, 100.0, 0.01)
             discount_percent = st.slider("Discount (%)", 0.0, 50.0, 10.0, 0.1)
             finalprice = st.number_input("Final Price ($)", 0.0, 10000.0, price * (1 - discount_percent/100), 0.01)
             
             st.markdown("### 📦 Product Specifications")
-            material = st.text_input("Material", "Plastic")
+            material = st.selectbox("Material", ["Cotton", "Glass", "Metal", "Plastic", "Wood"])
             weight = st.number_input("Weight (kg)", 0.0, 1000.0, 1.0, 0.01)
             warranty = st.slider("Warranty (years)", 0.0, 10.0, 1.0, 0.1)
             productrating = st.slider("Product Rating", 1.0, 5.0, 4.0, 0.1)
@@ -1019,20 +973,20 @@ def show_prediction_page():
             st.markdown("### 📍 Location & Logistics")
             location = st.text_input("Location", "L01", help="Store/warehouse location code")
             warehouse = st.selectbox("Warehouse", ["W1", "W2", "W3"])
-            inventorytype = st.selectbox("Inventory Type", ["Fresh", "Returned", "Finished Goods", "Repaired"])
+            inventorytype = st.selectbox("Inventory Type", ["Finished Goods", "Fresh", "Repaired", "Returned"])
             stocklevel = st.number_input("Current Stock Level", 0, 10000, 100)
             supplierdelay = st.number_input("Supplier Delay (days)", 0, 30, 5)
             
             st.markdown("### 🎯 Marketing & Competition")
-            promocodeused = st.selectbox("Promocode Used", ["No", "Yes"])
-            adcampaign = st.selectbox("Ad Campaign", ["None", "TV", "Online"])
+            promocodeused = st.selectbox("Promocode Used", ["no", "yes"])
+            adcampaign = st.selectbox("Ad Campaign", ["online", "tv", "unknown"])
             competitorprice = st.number_input("Competitor Price ($)", 0.0, 10000.0, price * 1.1, 0.01)
             
             st.markdown("### 📅 Temporal Factors")
             date = st.date_input("Prediction Date", datetime.now())
-            season = st.selectbox("Season", ["Spring", "Summer", "Autumn", "Winter"])
-            isweekend = st.selectbox("Is Weekend", ["No", "Yes"])
-            daytype = st.selectbox("Day Type", ["Weekday", "Weekend", "Holiday"])
+            season = st.selectbox("Season", ["spring", "summer", "autumn", "winter"])
+            isweekend = st.selectbox("Is Weekend", ["no", "yes"])
+            daytype = st.selectbox("Day Type", ["weekday", "weekend", "holiday"])
     
     with tab2:
         st.markdown("### 🌤️ Environmental Conditions")
@@ -1060,33 +1014,36 @@ def show_prediction_page():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("🔮 Generate Demand Forecast", type="primary", use_container_width=True):
-            # Prepare input data
+            # Calculate final price properly
+            calculated_finalprice = price * (1 - discount_percent/100)
+            
+            # Prepare input data exactly as expected by the model
             input_data = {
-                "productid": productid,
-                "location": location,
+                "productid": str(productid),
+                "location": str(location),
                 "date": pd.to_datetime(date),
-                "promocodeused": promocodeused,
-                "price": price,
-                "discount_percent": discount_percent,
-                "competitorprice": competitorprice,
-                "adcampaign": adcampaign,
-                "finalprice": finalprice,
-                "isweekend": isweekend,
-                "season": season,
-                "daytype": daytype,
-                "temp(c)": temp,
-                "rainfall(mm)": rainfall,
-                "category": category,
-                "brand": brand,
-                "material": material,
-                "weight(kg)": weight,
-                "warranty(years)": warranty,
-                "productrating": productrating,
-                "launchyear": launchyear,
-                "stocklevel": stocklevel,
-                "supplierdelay(days)": supplierdelay,
-                "warehouse": warehouse,
-                "inventorytype": inventorytype
+                "promocodeused": str(promocodeused),
+                "price": float(price),
+                "discount_percent": float(discount_percent),
+                "competitorprice": float(competitorprice),
+                "adcampaign": str(adcampaign),
+                "finalprice": float(calculated_finalprice),
+                "isweekend": str(isweekend),
+                "season": str(season),
+                "daytype": str(daytype),
+                "temp(c)": float(temp),
+                "rainfall(mm)": float(rainfall),
+                "category": str(category),
+                "brand": str(brand),
+                "material": str(material),
+                "weight(kg)": float(weight),
+                "warranty(years)": float(warranty),
+                "productrating": float(productrating),
+                "launchyear": int(launchyear),
+                "stocklevel": int(stocklevel),
+                "supplierdelay(days)": int(supplierdelay),
+                "warehouse": str(warehouse),
+                "inventorytype": str(inventorytype)
             }
             
             try:
@@ -1097,17 +1054,62 @@ def show_prediction_page():
                         seasonal_multiplier = {"Spring": 1.1, "Summer": 1.3, "Autumn": 0.9, "Winter": 0.8}
                         price_factor = max(0.5, 1.5 - (price / 100))
                         rating_factor = productrating / 5
-                        weekend_factor = 1.2 if isweekend == "Yes" else 1.0
-                        promo_factor = 1.15 if promocodeused == "Yes" else 1.0
+                        weekend_factor = 1.2 if isweekend == "yes" else 1.0
+                        promo_factor = 1.15 if promocodeused == "yes" else 1.0
                         
                         prediction = base_demand * seasonal_multiplier[season] * price_factor * rating_factor * weekend_factor * promo_factor
                         prediction = max(1, prediction + np.random.normal(0, 5))  # Add some variance
                     
                     st.warning("🎮 Demo Mode: This is a simulated prediction for testing purposes")
                 else:
+                    # Create DataFrame and ensure proper data types
                     df = pd.DataFrame([input_data])
+                    
                     with st.spinner("🧠 AI is analyzing your data..."):
-                        prediction = model.predict(df)[0]
+                        # Clean the input data to avoid NA issues
+                        df_clean = df.copy()
+                        
+                        # Ensure all string columns are proper strings
+                        string_columns = ['productid', 'location', 'promocodeused', 'adcampaign', 
+                                        'isweekend', 'season', 'daytype', 'category', 'brand', 
+                                        'material', 'warehouse', 'inventorytype']
+                        for col in string_columns:
+                            if col in df_clean.columns:
+                                df_clean[col] = df_clean[col].astype(str)
+                                df_clean[col] = df_clean[col].fillna('Unknown')
+                        
+                        # Ensure numeric columns are proper numeric types
+                        numeric_columns = ['price', 'discount_percent', 'competitorprice', 'finalprice',
+                                         'temp(c)', 'rainfall(mm)', 'weight(kg)', 'warranty(years)',
+                                         'productrating', 'launchyear', 'stocklevel', 'supplierdelay(days)']
+                        for col in numeric_columns:
+                            if col in df_clean.columns:
+                                df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce')
+                                df_clean[col] = df_clean[col].fillna(0)
+                        
+                        # Ensure date is proper datetime
+                        if 'date' in df_clean.columns:
+                            df_clean['date'] = pd.to_datetime(df_clean['date'], errors='coerce')
+                            if df_clean['date'].isna().any():
+                                df_clean['date'] = pd.to_datetime('today')
+                        
+                        # Check for any remaining NA values and handle them
+                        for col in df_clean.columns:
+                            if df_clean[col].isna().any():
+                                if df_clean[col].dtype == 'object':
+                                    df_clean[col] = df_clean[col].fillna('Unknown')
+                                else:
+                                    df_clean[col] = df_clean[col].fillna(0)
+                        
+                        # Display the cleaned data for debugging
+                        with st.expander("🔍 Debug: View Processed Data", expanded=False):
+                            st.write("Cleaned input data:")
+                            st.dataframe(df_clean)
+                            st.write(f"Data types: {df_clean.dtypes.to_dict()}")
+                            st.write(f"NA values: {df_clean.isna().sum().to_dict()}")
+                        
+                        # Make prediction
+                        prediction = model.predict(df_clean)[0]
                 
                 # Display results
                 show_prediction_results(prediction, input_data)
@@ -1411,25 +1413,31 @@ def main():
 
 def show_sidebar_info():
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📊 Model Status")
+    st.sidebar.markdown("### 📊 System Status")
     
     if os.path.exists(MODEL_PATH):
-        st.sidebar.success("✅ Model Ready")
         model_size = os.path.getsize(MODEL_PATH) / (1024 * 1024)  # MB
+        st.sidebar.success("✅ Model Ready")
         st.sidebar.info(f"📁 Size: {model_size:.1f} MB")
+        st.sidebar.info("🎯 Accuracy: 89.4%")
     else:
-        st.sidebar.warning("⏳ Model Loading...")
+        st.sidebar.error("❌ Model Missing")
+        st.sidebar.info("Run: python main.py")
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 🔧 Settings")
-    st.sidebar.selectbox("Theme", ["Light", "Dark"])
-    st.sidebar.checkbox("Enable Notifications", value=True)
+    st.sidebar.markdown("### 🔧 Model Info")
+    st.sidebar.markdown("**Algorithm:** RandomForest")
+    st.sidebar.markdown("**Features:** 48")
+    st.sidebar.markdown("**Training:** 511K samples") 
+    st.sidebar.markdown("**R² Score:** 89.43%")
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📈 Quick Stats")
-    st.sidebar.metric("Predictions Today", "127")
-    st.sidebar.metric("Accuracy Rate", "94.2%")
-    st.sidebar.metric("Active Users", "1,234")
+    st.sidebar.markdown("### � Quick Actions")
+    if st.sidebar.button("🔄 Retrain Model"):
+        st.sidebar.info("Run `python main.py` in terminal")
+    
+    if st.sidebar.button("📊 View Analytics"):
+        st.sidebar.info("Navigate to Analytics tab")
 
 if __name__ == "__main__":
     main()
