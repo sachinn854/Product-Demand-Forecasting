@@ -6,7 +6,6 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 **🚀 Live Demo:** [https://appuct-demand-forecasting-prediction.streamlit.app/](https://appuct-demand-forecasting-prediction.streamlit.app/)
 
@@ -218,7 +217,7 @@ python main.py
 | 🎨 **Frontend** | Streamlit, HTML/CSS, Plotly |
 | 🤖 **Machine Learning** | Scikit-learn, Pandas, NumPy |
 | 🔄 **Data Processing** | Feature Engineering, Custom Transformers |
-| 🐳 **Deployment** | Docker, Render.com |
+| 🐳 **Deployment** | Docker, streamlit.com |
 | 📊 **Visualization** | Plotly, Matplotlib, Seaborn |
 
 </div>
