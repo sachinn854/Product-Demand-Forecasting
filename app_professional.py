@@ -67,24 +67,13 @@ def load_professional_css():
     
     /* Feature Cards */
     .feature-card {
-        background: #ffffff;
-        color: #2c3e50;
+        background: white;
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         border-left: 5px solid #667eea;
         margin: 1rem 0;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .feature-card h3 {
-        color: #667eea !important;
-        margin-bottom: 1rem !important;
-    }
-    
-    .feature-card p, .feature-card li {
-        color: #2c3e50 !important;
-        line-height: 1.6 !important;
     }
     
     .feature-card:hover {
@@ -95,16 +84,10 @@ def load_professional_css():
     /* Input Sections */
     .input-section {
         background: #f8f9fa;
-        color: #2c3e50;
         padding: 1.5rem;
         border-radius: 12px;
         margin: 1rem 0;
         border: 1px solid #e9ecef;
-    }
-    
-    .input-section h3 {
-        color: #495057 !important;
-        margin-bottom: 1rem !important;
     }
     
     /* Metrics Cards */
@@ -177,59 +160,26 @@ def load_professional_css():
     /* Info Boxes */
     .info-box {
         background: #e3f2fd;
-        color: #1565c0;
         border-left: 4px solid #2196f3;
         padding: 1rem;
         border-radius: 8px;
         margin: 1rem 0;
     }
     
-    .info-box h4 {
-        color: #1565c0 !important;
-        margin-bottom: 0.5rem !important;
-    }
-    
-    .info-box p {
-        color: #1976d2 !important;
-        margin: 0 !important;
-    }
-    
     .warning-box {
         background: #fff3e0;
-        color: #f57c00;
         border-left: 4px solid #ff9800;
         padding: 1rem;
         border-radius: 8px;
         margin: 1rem 0;
     }
     
-    .warning-box h4 {
-        color: #f57c00 !important;
-        margin-bottom: 0.5rem !important;
-    }
-    
-    .warning-box p {
-        color: #ff8f00 !important;
-        margin: 0 !important;
-    }
-    
     .success-box {
         background: #e8f5e8;
-        color: #2e7d32;
         border-left: 4px solid #4caf50;
         padding: 1rem;
         border-radius: 8px;
         margin: 1rem 0;
-    }
-    
-    .success-box h4 {
-        color: #2e7d32 !important;
-        margin-bottom: 0.5rem !important;
-    }
-    
-    .success-box p {
-        color: #388e3c !important;
-        margin: 0 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -738,349 +688,13 @@ def main():
     elif page == "🔮 AI Prediction Engine":
         show_professional_prediction()
     elif page == "📊 Analytics Dashboard":
-        show_analytics_dashboard()
-
-def show_analytics_dashboard():
-    """Comprehensive analytics dashboard"""
-    load_professional_css()
-    
-    st.markdown("# 📊 Analytics Dashboard")
-    st.markdown("### Real-time Business Intelligence & Performance Metrics")
-    
-    # Load model status for dashboard
-    model = load_local_model()
-    
-    # Dashboard tabs
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Market Overview", "🎯 Performance Metrics", "📦 Inventory Analysis", "💰 Revenue Intelligence"])
-    
-    with tab1:
-        st.markdown("## 📈 Market Overview")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # Sample demand trends chart
-            st.markdown("### Demand Trends by Category")
-            
-            # Generate sample data for demonstration
-            categories = ['Electronics', 'Beauty', 'Clothing', 'Home', 'Toys']
-            months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-            
-            # Create sample trend data
-            trend_data = []
-            for cat in categories:
-                for month in months:
-                    base_demand = np.random.randint(50, 200)
-                    trend_data.append({'Category': cat, 'Month': month, 'Demand': base_demand})
-            
-            df_trends = pd.DataFrame(trend_data)
-            
-            fig = px.line(df_trends, x='Month', y='Demand', color='Category',
-                         title="Monthly Demand Trends by Category",
-                         markers=True)
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            # Market share analysis
-            st.markdown("### Market Share by Category")
-            
-            market_share = {
-                'Category': categories,
-                'Market Share (%)': [35, 20, 25, 15, 5]
-            }
-            df_market = pd.DataFrame(market_share)
-            
-            fig = px.pie(df_market, values='Market Share (%)', names='Category',
-                        title="Category Market Share",
-                        color_discrete_sequence=px.colors.qualitative.Set3)
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Seasonal analysis
-        st.markdown("### 🌱 Seasonal Demand Patterns")
-        
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.markdown("""
-            <div class="metric-card">
-                <h3 style="margin: 0; font-size: 1.8rem;">🌸 Spring</h3>
-                <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">+10% Demand</p>
-                <small style="opacity: 0.8;">Peak: Beauty & Home</small>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown("""
-            <div class="metric-card">
-                <h3 style="margin: 0; font-size: 1.8rem;">☀️ Summer</h3>
-                <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">+30% Demand</p>
-                <small style="opacity: 0.8;">Peak: Electronics & Toys</small>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col3:
-            st.markdown("""
-            <div class="metric-card">
-                <h3 style="margin: 0; font-size: 1.8rem;">🍂 Autumn</h3>
-                <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">-10% Demand</p>
-                <small style="opacity: 0.8;">Peak: Clothing</small>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col4:
-            st.markdown("""
-            <div class="metric-card">
-                <h3 style="margin: 0; font-size: 1.8rem;">❄️ Winter</h3>
-                <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">-20% Demand</p>
-                <small style="opacity: 0.8;">Peak: Home & Clothing</small>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    with tab2:
-        st.markdown("## 🎯 Performance Metrics")
-        
-        # Model performance section
-        st.markdown("### 🤖 AI Model Performance")
-        
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.metric("Model Accuracy", "89.4%", "+2.1%")
-        with col2:
-            st.metric("Predictions Made", "15,847", "+1,234")
-        with col3:
-            st.metric("Average Error", "8.4 units", "-0.6")
-        with col4:
-            st.metric("Model Confidence", "94.3%", "+1.2%")
-        
-        # Performance over time
-        st.markdown("### 📊 Accuracy Trends")
-        
-        # Sample accuracy data - ensure all arrays have same length
-        accuracy_values = [85.2, 86.1, 87.3, 88.1, 88.7, 89.0, 89.2, 89.4]
-        prediction_counts = [1200, 1350, 1480, 1620, 1780, 1890, 2010, 2150]
-        month_labels = ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024', 'Jul 2024', 'Aug 2024']
-        
-        accuracy_data = {
-            'Month': month_labels,
-            'Accuracy (%)': accuracy_values,
-            'Predictions': prediction_counts
-        }
-        df_perf = pd.DataFrame(accuracy_data)
-        
-        fig = make_subplots(specs=[[{"secondary_y": True}]])
-        
-        fig.add_trace(
-            go.Scatter(x=df_perf['Month'], y=df_perf['Accuracy (%)'], 
-                      name="Accuracy (%)", line=dict(color='#667eea', width=3)),
-            secondary_y=False,
-        )
-        
-        fig.add_trace(
-            go.Bar(x=df_perf['Month'], y=df_perf['Predictions'], 
-                   name="Monthly Predictions", opacity=0.7, marker_color='#764ba2'),
-            secondary_y=True,
-        )
-        
-        fig.update_xaxes(title_text="Month")
-        fig.update_yaxes(title_text="Accuracy (%)", secondary_y=False)
-        fig.update_yaxes(title_text="Number of Predictions", secondary_y=True)
-        fig.update_layout(title="Model Performance Over Time", height=400)
-        
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with tab3:
-        st.markdown("## � Inventory Analysis")
-        
-        # Inventory metrics
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.metric("Total SKUs", "2,547", "+127")
-        with col2:
-            st.metric("Stock Turnover", "4.2x", "+0.3x")
-        with col3:
-            st.metric("Overstock Items", "234", "-45")
-        with col4:
-            st.metric("Stockout Risk", "12%", "-3%")
-        
-        # Inventory analysis charts
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("### 📊 Stock Level Distribution")
-            
-            # Sample inventory data
-            stock_levels = ['Overstock', 'Optimal', 'Low Stock', 'Out of Stock']
-            counts = [234, 1890, 345, 78]
-            colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#ff8b94']
-            
-            fig = go.Figure(data=[go.Bar(x=stock_levels, y=counts, marker_color=colors)])
-            fig.update_layout(title="Inventory Status Distribution", height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            st.markdown("### 🔄 Turnover by Category")
-            
-            turnover_data = {
-                'Category': categories,
-                'Turnover Rate': [5.2, 3.8, 4.1, 2.9, 6.1]
-            }
-            df_turnover = pd.DataFrame(turnover_data)
-            
-            fig = px.bar(df_turnover, x='Category', y='Turnover Rate',
-                        title="Inventory Turnover by Category",
-                        color='Turnover Rate',
-                        color_continuous_scale='viridis')
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Inventory recommendations
-        st.markdown("### 💡 Smart Inventory Recommendations")
-        
-        recommendations = [
-            "🔴 **Electronics**: Reduce stock by 15% - overstock detected",
-            "🟢 **Beauty**: Increase stock by 25% - high demand predicted",
-            "🟡 **Clothing**: Monitor closely - seasonal transition period",
-            "🔴 **Home**: Optimize SKU mix - low-performing items identified",
-            "🟢 **Toys**: Prepare for peak season - 40% increase expected"
-        ]
-        
-        for rec in recommendations:
-            st.markdown(f"- {rec}")
-    
-    with tab4:
-        st.markdown("## 💰 Revenue Intelligence")
-        
-        # Revenue metrics
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            st.metric("Monthly Revenue", "$2.4M", "+15.2%")
-        with col2:
-            st.metric("Avg Order Value", "$156", "+$12")
-        with col3:
-            st.metric("Profit Margin", "23.4%", "+2.1%")
-        with col4:
-            st.metric("Revenue/Unit", "$87", "+$5")
-        
-        # Revenue analysis
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("### 📈 Revenue Trends")
-            
-            # Sample revenue data
-            revenue_months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
-            revenue_values = [1.8, 2.1, 2.3, 2.0, 2.4, 2.7, 2.5, 2.4]
-            
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=revenue_months, y=revenue_values,
-                                   mode='lines+markers',
-                                   line=dict(color='#11998e', width=4),
-                                   marker=dict(size=10)))
-            fig.update_layout(title="Monthly Revenue Trend (Millions $)",
-                            yaxis_title="Revenue ($M)",
-                            height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        with col2:
-            st.markdown("### 💎 Revenue by Category")
-            
-            revenue_by_cat = {
-                'Category': categories,
-                'Revenue ($M)': [0.84, 0.48, 0.60, 0.36, 0.12]
-            }
-            df_rev = pd.DataFrame(revenue_by_cat)
-            
-            fig = px.bar(df_rev, x='Category', y='Revenue ($M)',
-                        title="Revenue Distribution by Category",
-                        color='Revenue ($M)',
-                        color_continuous_scale='plasma')
-            fig.update_layout(height=400)
-            st.plotly_chart(fig, use_container_width=True)
-        
-        # Price optimization insights
-        st.markdown("### 🎯 Price Optimization Insights")
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.markdown("""
-            <div class="info-box">
-                <h4>💡 Pricing Opportunities</h4>
-                <p><strong>Electronics:</strong> 5% price increase possible<br>
-                <strong>Beauty:</strong> Premium pricing strategy recommended<br>
-                <strong>Toys:</strong> Seasonal pricing adjustment needed</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown("""
-            <div class="warning-box">
-                <h4>⚠️ Price Risks</h4>
-                <p><strong>Clothing:</strong> Competitor underpricing by 8%<br>
-                <strong>Home:</strong> Market saturation detected<br>
-                <strong>Overall:</strong> Monitor price elasticity</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col3:
-            st.markdown("""
-            <div class="success-box">
-                <h4>✅ Success Metrics</h4>
-                <p><strong>Revenue Growth:</strong> +15.2% YoY<br>
-                <strong>Margin Improvement:</strong> +2.1%<br>
-                <strong>Price Optimization:</strong> +$847K additional revenue</p>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    # Bottom summary section
-    st.markdown("---")
-    st.markdown("## 🎯 Executive Summary")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div class="feature-card">
-            <h3>📊 Key Performance Indicators</h3>
-            <ul>
-                <li><strong>Model Accuracy:</strong> 89.4% (Industry leading)</li>
-                <li><strong>Revenue Growth:</strong> +15.2% month-over-month</li>
-                <li><strong>Inventory Optimization:</strong> 4.2x turnover rate</li>
-                <li><strong>Prediction Volume:</strong> 15,847 forecasts generated</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class="feature-card">
-            <h3>🎯 Strategic Insights</h3>
-            <ul>
-                <li><strong>Summer Peak:</strong> 30% demand increase predicted</li>
-                <li><strong>Electronics:</strong> Highest revenue contributor (35%)</li>
-                <li><strong>Price Optimization:</strong> $847K additional revenue potential</li>
-                <li><strong>Inventory Health:</strong> 88% optimal stock levels</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div class="feature-card">
-            <h3>🚀 Action Items</h3>
-            <ul>
-                <li><strong>Immediate:</strong> Increase Beauty category stock by 25%</li>
-                <li><strong>This Week:</strong> Optimize Electronics pricing (+5%)</li>
-                <li><strong>This Month:</strong> Prepare for seasonal transition</li>
-                <li><strong>Next Quarter:</strong> Expand high-performing SKUs</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("# 📊 Analytics Dashboard")
+        st.info("🚧 Advanced analytics dashboard coming soon!")
+        st.markdown("Features will include:")
+        st.markdown("- Historical demand trends")
+        st.markdown("- Market analysis")
+        st.markdown("- Performance metrics")
+        st.markdown("- Batch predictions")
 
 if __name__ == "__main__":
     main()

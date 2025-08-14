@@ -1,8 +1,11 @@
 # Python base image
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 # Work directory
 WORKDIR /app
+
+# Update pip and install build dependencies
+RUN pip install --upgrade pip
 
 # Requirements install
 COPY requirements.txt .
