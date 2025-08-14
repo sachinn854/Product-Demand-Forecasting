@@ -4,10 +4,18 @@ __pycache__/
 .DS_Store
 
 # Data files (keep these ignored due to size)
-8_Encoding/Encoded_data_Y.csv
-8_Encoding/Encoded_data_X.csv
-7_Feature Selection/Featured_data.csv
-6_Merge File/Master_file.csv
+# Raw data files
+1_DATA/*.csv
+
+# Cleaned data files  
+3_CLEANED DATA/*.csv
+
+# Merge files
+6_Merge File/*.csv
+
+# Feature and encoding files
+7_Feature Selection/*.csv
+8_Encoding/*.csv
 
 # Remove pkl files from gitignore - models are now small enough for GitHub
 # best_model.pkl
