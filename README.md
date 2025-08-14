@@ -8,7 +8,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**🚀 Live Demo:** [https://product-demand-forecasting.onrender.com/](https://product-demand-forecasting.onrender.com/)
+**🚀 Live Demo:** [https://appuct-demand-forecasting-prediction.streamlit.app/](https://appuct-demand-forecasting-prediction.streamlit.app/)
 
 *An enterprise-grade machine learning solution for accurate product demand forecasting with 89.4% accuracy*
 
@@ -127,7 +127,6 @@ Predicting product demand accurately is crucial for:
 |-------|----------|---------------|--------|
 | 🌲 **RandomForest** | **89.4%** | 2 minutes | ✅ **Selected** |
 | 🌳 Decision Tree | 80.7% | 30 seconds | ⚠️ Baseline |
-| 🚀 XGBoost | 87.2% | 5 minutes | 📊 Alternative |
 
 ### 🎯 **Model Performance**
 - 🏆 **89.4% Accuracy** - Industry-leading performance
@@ -275,7 +274,7 @@ The analytics dashboard provides:
 ## 🚀 **Deployment**
 
 ### 🌐 **Live Demo**
-**URL:** [https://product-demand-forecasting.onrender.com/](https://product-demand-forecasting.onrender.com/)
+**URL:** [https://appuct-demand-forecasting-prediction.streamlit.app/](https://appuct-demand-forecasting-prediction.streamlit.app/)
 
 ### 🐳 **Docker Deployment**
 
@@ -290,18 +289,7 @@ docker run -p 8501:8501 demand-forecasting-app
 docker run -d -p 8501:8501 --name forecasting-prod demand-forecasting-app
 ```
 
----
 
-## 🛣️ **Roadmap**
-
-- [ ] 🔮 **Advanced Models** - Deep Learning integration
-- [ ] 📊 **Enhanced Analytics** - More business intelligence features  
-- [ ] 🔗 **API Development** - REST API for integrations
-- [ ] 📱 **Mobile App** - React Native application
-- [ ] ☁️ **Cloud Integration** - AWS/Azure deployment
-- [ ] 🤖 **AutoML** - Automated model selection and tuning
-
----
 
 ## 🤝 **Contributing**
 
@@ -337,7 +325,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/sachinn854)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sachinn854)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sachinn854@gmail.com)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:syy63052@gmail.com)
 
 ---
 
